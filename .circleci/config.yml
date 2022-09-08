@@ -37,8 +37,7 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: 
-            pytest
-            flake8
+            pytest ; flake8
 
 
 # Invoke jobs via workflows
