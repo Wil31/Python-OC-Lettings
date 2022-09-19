@@ -8,7 +8,7 @@ orbs:
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build: # This is the name of the job, feel free to change it to better match what you're trying to do!
+  build-and-tests: # This is the name of the job, feel free to change it to better match what you're trying to do!
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
@@ -23,9 +23,36 @@ jobs:
       - run:
           name: Run tests
           command: pytest
+  build-and-push-dockerhub:
+    docker:
+      - image: cimg/python:3.10.2
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: docker build -t docker-oc-lettings:0.1 .
+      - run:
+          name: Login to DockerHub
+          command: docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+      - run:
+          name: Link to DockerHub
+          command: docker tag docker-oc-lettings:0.1 $DOCKERHUB_USERNAME/oc-lettings-site:$CIRCLE_SHA1
+      - run:
+          name: push Docker image
+          command: docker push $DOCKERHUB_USERNAME/oc-lettings-site:$CIRCLE_SHA1
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   pipelineci: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
-      - build
+      - build-and-tests
+      - build-and-push-dockerhub:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build-and-tests
+
+        
