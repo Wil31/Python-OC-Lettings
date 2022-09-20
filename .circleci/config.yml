@@ -54,5 +54,3 @@ workflows:
               only: master
           requires:
             - build-and-tests
-
-        
