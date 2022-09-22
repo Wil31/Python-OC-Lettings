@@ -21,4 +21,4 @@ COPY . /code/
 RUN python manage.py collectstatic
 
 # Run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:$PORT"]
+CMD gunicorn oc_lettings_site.wsgi -b 0.0.0.0:$PORT
