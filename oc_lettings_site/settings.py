@@ -111,4 +111,5 @@ STATIC_URL = "/static/"
 
 django_on_heroku.settings(locals())
 
-CSRF_TRUSTED_ORIGINS = ["https://oc-lettings-docker-wil.herokuapp.com/"]
+CSRF_TRUSTED_ORIGINS = ["https://oc-lettings-docker-wil.herokuapp.com"]
+CSRF_COOKIE_SECURE = False
