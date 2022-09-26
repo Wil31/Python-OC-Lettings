@@ -1,3 +1,4 @@
+from django.core.management.utils import get_random_secret_key
 import os
 import django_on_heroku
 
@@ -5,16 +6,17 @@ import django_on_heroku
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+ENVIRONMENT = os.environ.get("ENV", default="development")
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "fp$9^593hsriajg$_%=5trot9g!1qa@ew(o-1#@=&4%=hp46(s"
+if ENVIRONMENT != "production":
+    SECRET_KEY = get_random_secret_key()
+    DEBUG = True
+else:
+    SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+    DEBUG = False
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "herokuapp.com"]
 
 
 # Application definition
