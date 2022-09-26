@@ -1,3 +1,7 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Wil31/Python-OC-Lettings/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Wil31/Python-OC-Lettings/tree/master)
+
+[![CircleCI](https://dl.circleci.com/insights-snapshot/gh/Wil31/Python-OC-Lettings/master/pipelineci/badge.svg?window=7d)](https://app.circleci.com/insights/github/Wil31/Python-OC-Lettings/workflows/pipelineci/overview?branch=master&reporting-window=last-7-days&insights-snapshot=true)
+
 ## Résumé
 
 Site web d'Orange County Lettings
@@ -74,3 +78,37 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 - Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
 - Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+
+## Déploiement sur Heroku
+
+### Configuration
+
+#### DockerHub
+
+https://hub.docker.com/r/wil91/oc-lettings-site
+
+#### CircleCI 
+
+Configurez CircleCI avec les variables suivantes:
+
+| Clé                | Valeur                        |
+| ------------------ | ----------------------------- |
+| DOCKERHUB_USERNAME | Votre identifiant Docker Hub  |
+| DOCKERHUB_PASSWORD | Votre mot de passe Docker Hub |
+| HEROKU_TOKEN       | Votre API key sur Heroku      |
+| HEROKU_APP_NAME    | Le nom de l'application       |
+#### Heroku
+
+Dans les paramètres Heroku, dans Config Vars, configurer les variables suivantes:
+
+| Clé               | Valeur                 |
+| ----------------- | ---------------------- |
+| ENV               | production             |
+| DJANGO_SECRET_KEY | Toke générée Django    |
+
+#### Automatisation CI/CD
+
+CircleCI permet d'automatiser les tests, la conteneurisation et le déploiement sur Heroku, grâce
+au fichier config.yml se trouvant dans le dossier .circleci du projet. L'execution du pipeline CI/CD est déclenchée automatiquement lors d'un push sur la branch `master` 
+sur GitHub.  
+L'application est déployée vers le site [https://oc-lettings-docker-wil.herokuapp.com/](https://oc-lettings-docker-wil.herokuapp.com/).
