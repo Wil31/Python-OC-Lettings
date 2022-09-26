@@ -1,6 +1,9 @@
 from django.core.management.utils import get_random_secret_key
 import os
 import django_on_heroku
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -115,3 +118,17 @@ django_on_heroku.settings(locals())
 
 CSRF_TRUSTED_ORIGINS = ["https://oc-lettings-docker-wil.herokuapp.com"]
 CSRF_COOKIE_SECURE = False
+
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"),
+    integrations=[
+        DjangoIntegration(),
+    ],
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+)
