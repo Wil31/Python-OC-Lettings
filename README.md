@@ -85,26 +85,46 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 #### DockerHub
 
-https://hub.docker.com/r/wil91/oc-lettings-site
+1. Créez un compte sur [Docker](https://hub.docker.com/signup/)
+2. Créez un nouveau repo sur DockerHub
+3. Remplacez le nom de repo [L44 de config.yml](https://github.com/Wil31/Python-OC-Lettings/blob/7c4e0ea9f24f19647ffb43bc971003cff79c5a4f/.circleci/config.yml#L44) ($DOCKERHUB_USERNAME/[votre-repo]) par votre repository.
+
+Repo DockerHub utilisé pour le projet:
+[hub.docker.com/r/wil91/oc-lettings-site](https://hub.docker.com/r/wil91/oc-lettings-site)
+
+#### Sentry
+
+Une surveillance de l’application et suivi des erreurs est effectué avec Sentry. 
+
+1. Créez un compte [Sentry](https://sentry.io/signup/)
+2. Créez un projet Django dans Sentry
+3. Récupérez votre clé DSN du projet
+
+#### Heroku
+
+1. Créez un compte [Heroku](https://www.heroku.com/home)
+2. Créez un nouvelle application Heroku
+3. Récupérez votre token Heroku (API Key) dans les paramètres de votre compte
+4. Dans les paramètres Heroku, dans Config Vars, configurer les variables suivantes:
+
+| Clé               | Valeur               |
+| ----------------- | -------------------- |
+| ENV               | production           |
+| DJANGO_SECRET_KEY | Token générée Django |
+| SENTRY_DSN        | Token générée Sentry |
 
 #### CircleCI 
 
-Configurez CircleCI avec les variables suivantes:
+1. Créer un compte sur [circleci.com](https://circleci.com/)
+2. Commencer la configuration du projet https://circleci.com/docs/config-intro
+3. Configurez CircleCI avec les variables d'environnement suivantes:
 
 | Clé                | Valeur                        |
 | ------------------ | ----------------------------- |
 | DOCKERHUB_USERNAME | Votre identifiant Docker Hub  |
 | DOCKERHUB_PASSWORD | Votre mot de passe Docker Hub |
 | HEROKU_TOKEN       | Votre API key sur Heroku      |
-| HEROKU_APP_NAME    | Le nom de l'application       |
-#### Heroku
-
-Dans les paramètres Heroku, dans Config Vars, configurer les variables suivantes:
-
-| Clé               | Valeur                 |
-| ----------------- | ---------------------- |
-| ENV               | production             |
-| DJANGO_SECRET_KEY | Toke générée Django    |
+| HEROKU_APP_NAME    | Le nom de l'app Heroku        |
 
 #### Automatisation CI/CD
 
@@ -112,3 +132,11 @@ CircleCI permet d'automatiser les tests, la conteneurisation et le déploiement 
 au fichier config.yml se trouvant dans le dossier .circleci du projet. L'execution du pipeline CI/CD est déclenchée automatiquement lors d'un push sur la branch `master` 
 sur GitHub.  
 L'application est déployée vers le site [https://oc-lettings-docker-wil.herokuapp.com/](https://oc-lettings-docker-wil.herokuapp.com/).
+
+## Déployer en local une image Docker du projet
+
+La commande suivante récupère et déploie en local une image du projet:  
+`docker run -d -p 8000:8000 wil91/oc-lettings-site:$TAG`  
+Remplacer `wil91/oc-lettings-site` par votre docker hub.  
+Prendre le dernier tag sur DockerHub:  
+https://hub.docker.com/r/wil91/oc-lettings-site/tags
